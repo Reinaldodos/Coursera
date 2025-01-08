@@ -1,0 +1,18 @@
+language: r
+cache: packages
+
+r:
+  - release
+  - devel
+  - oldrel
+
+warnings_are_errors: false
+
+# Optional: build the README.md from README.Rmd
+before_script:
+  - Rscript -e 'if (file.exists("README.Rmd")) rmarkdown::render("README.Rmd")'
+
+# Run tests and build checks
+script:
+  - R CMD build .
+  - R CMD check *.tar.gz --as-cran
