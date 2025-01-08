@@ -1,0 +1,161 @@
+---
+title: "FARS Functions: User Guide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FARS Functions: User Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+  )
+```
+
+
+------------------------------------------------------------------------
+
+# Introduction
+
+This document explains how the functions in the script for analyzing the Fatality Analysis Reporting System (FARS) data operate. This system collects information on fatal road accidents in the United States. The functions presented here allow you to read, summarize, and visualize these data.
+
+# `fars_read` Function
+
+**Description:**
+This function reads a FARS data file located in the working directory. It uses `readr::read_csv` to import the data and converts it into a tibble for easier manipulation.
+
+**Usage:**
+
+```         
+fars_read(filename)
+```
+
+-   **Parameter:** `filename`: Path to the FARS data file (string).
+
+-   **Returns:** A tibble containing the data from the file.
+
+**Example:**
+
+```         
+fars_read("accident_2013.csv.bz2")
+```
+
+------------------------------------------------------------------------
+
+# `make_filename` Function
+
+**Description:**
+Generates a standard file name for FARS data for a given year.
+
+**Usage:**
+
+```         
+make_filename(year)
+```
+
+-   **Parameter:** `year`: Year (integer).
+
+-   **Returns:** A string with the file name.
+
+**Example:**
+
+```         
+make_filename(2013)
+# Returns "accident_2013.csv.bz2"
+```
+
+------------------------------------------------------------------------
+
+# `fars_read_years` Function
+
+**Description:**
+Reads FARS data for multiple years and extracts the `MONTH` and `year` columns.
+
+**Usage:**
+
+```         
+fars_read_years(years)
+```
+
+-   **Parameter:** `years`: A vector of years (integers).
+
+-   **Returns:** A list of tibbles containing the month and year data.
+
+**Example:**
+
+```         
+fars_read_years(c(2013, 2014))
+```
+
+**Notes:** Invalid years generate a warning.
+
+------------------------------------------------------------------------
+
+# `fars_summarize_years` Function
+
+**Description:**
+Summarizes the number of FARS observations by month and year.
+
+**Usage:**
+
+```         
+fars_summarize_years(years)
+```
+
+-   **Parameter:** `years`: A vector of years (integers).
+
+-   **Returns:** A tibble summarizing observations by month and year.
+
+**Example:**
+
+```         
+fars_summarize_years(c(2013, 2014))
+```
+
+**Notes:** Uses `dplyr::group_by` and `tidyr::spread` to create a table crossing months and years.
+
+------------------------------------------------------------------------
+
+# `fars_map_state` Function
+
+**Description:**
+Displays the locations of FARS accidents for a given state and year as a map.
+
+**Usage:**
+
+```         
+fars_map_state(state.num, year)
+```
+
+-   **Parameters:**
+
+    -   `state.num`: State number (integer).
+
+    -   `year`: Year (integer).
+
+-   **Returns:** A map with accident locations or a message if no data is available.
+
+**Example:**
+
+```         
+fars_map_state(1, 2013)
+```
+
+**Notes:** Extreme longitude and latitude values are filtered before map creation.
+
+------------------------------------------------------------------------
+
+# Conclusion
+
+These functions form a comprehensive toolkit for analyzing FARS data. They allow you to:
+
+1.  Load the data (using `fars_read` and `fars_read_years`).
+
+2.  Generate summaries (using `fars_summarize_years`).
+
+3.  Visualize the data (using `fars_map_state`).
+
+These tools facilitate the exploration and interpretation of data on road accidents in the United States.
